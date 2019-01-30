@@ -1,0 +1,89 @@
+apply plugin: 'com.darkmagic.android.apkbuild'
+
+// 每一步的编译耗时统计
+spendTimeOptions {
+    enabled true
+    sort "ASC"
+}
+
+publishConfig {
+    // 是否开启日志
+    logEnable true
+
+    // [apkPrefix]_[versionName]_[date]_[debug|release]_[apkSuffix].apk
+    // 生成的APK包的前缀
+    apkPrefix "AMC"
+
+    // 渠道号
+    channel "googleApk"
+
+    // 是否使用V2进行签名，默认没有开启
+    v2SigningEnabled true
+
+    // APK包发布到的位置
+    outDir "I:/android/out"
+
+    // 带符号列表的so文件路径，如app/build/intermediates/transforms/mergeJniLibs/debug/0/lib
+    symbolSOPath ''
+
+    // 为了支持CrashReporter，打包完成后将mapping文件上传到CrashReporter目录下面
+    crashReporterProGuard "//192.168.1.247/public/mobile/android/CrashReporter/update/ProGuard"
+
+    // 文件修改，如果修改app module下面的java代码可以写相对路径，如果要修改其他文件需要写绝对路径
+    replaceConfig {
+        // 参数1：要修改的文件，
+        // 参数2：要修改的变量的权限字段
+        // 参数3：要修改的变量的类型
+        // 参数4：要修改的变量的名字
+        // 参数5：新的值
+        debugReplace "gradleplugn/gradleplugn/MainActivity.java", "private", "boolean", "isDebug", "true"
+        debugReplace "gradleplugn/gradleplugn/MainActivity.java", "private", "String", "channelName", "${channel}"
+
+        // 参数1：要修改的文件
+        // 参数2：要替换的字符串
+        // 参数3：新的字符串
+        debugReplace "gradleplugn/gradleplugn/MainActivity.java", "\"LOG_DEBUG: \"", "\"BuildConfig.LOG_DEBUG1:\""
+
+        releaseReplace "gradleplugn/gradleplugn/MainActivity.java", "private", "boolean", "isDebug", "false"
+        releaseReplace "gradleplugn/gradleplugn/MainActivity.java", "private", "String", "channelName", "${channel}"
+
+    }
+
+    // 配置资源混淆
+    // https://github.com/shwenzhang/AndResGuard/blob/master/doc/how_to_work.zh-cn.md
+    resGuardOption {
+        // 是否开启资源混淆
+        enabled true
+
+        // 是否使用7zip压缩
+        use7zip true
+
+        // 7zip工具路径，可以不用指定，插件会自动下载7zip
+//      sevenZipPath "D:\\tools\\7z\\7z.exe"
+
+        // 是否开启Sign
+        useSign true
+
+        // 打开这个开关，会保留住所有资源的原始路径，只混淆资源的名字
+        keepRoot false
+
+        // 压缩白名单
+        whiteList = [
+                "R.drawable.icon",
+                "R.string.app_name"
+        ]
+
+        // 额外要压缩的文件
+        compressFilePattern = [
+                "*.png",
+                "*.jpg",
+                "*.jpeg",
+                "*.gif",
+                "resources.arsc"
+        ]
+
+        // 是否输出资源压缩的混淆文件
+        outputResMappingFile true
+    }
+}
+

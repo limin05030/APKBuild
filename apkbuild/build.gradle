@@ -1,0 +1,40 @@
+apply plugin: 'groovy'
+apply plugin: 'maven'
+
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+    flatDir {
+        dirs 'libs'
+    }
+}
+
+dependencies {
+    implementation gradleApi()
+    implementation localGroovy()
+    implementation 'com.google.gradle:osdetector-gradle-plugin:1.4.0'
+    implementation "com.android.tools.build:gradle:$BUILD_GRADLE"
+}
+
+ext {
+    // java文件编码方式设置为utf-8
+    compileJava.options.encoding = 'UTF-8'
+    compileTestJava.options.encoding = 'UTF-8'
+    sourceCompatibility = 1.7
+}
+
+task sourcesJar(type: Jar) {
+    from sourceSets.main.java.srcDirs
+    classifier = 'sources'
+}
+
+artifacts {
+    archives sourcesJar
+}
+
+// gradlew -p apkbuild clean install bintrayUpload
+apply from: 'jcenter.gradle'
+
+// gradlew -p apkbuild clean build uploadArchives
+apply from: 'localeMaven.gradle'

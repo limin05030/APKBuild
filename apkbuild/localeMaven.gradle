@@ -1,0 +1,14 @@
+def PROJ_MAVEN_URL = 'file:////192.168.1.247/public/mobile/android/commonlib'
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            repository(url: PROJ_MAVEN_URL)
+            pom.groupId = rootProject.ext.groupId
+            pom.artifactId = rootProject.ext.artifactId
+            pom.version = rootProject.ext.version
+        }
+    }
+}
+
+// gradlew -p apkbuild clean build uploadArchives

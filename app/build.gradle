@@ -1,0 +1,61 @@
+apply plugin: 'com.android.application'
+apply from: 'apkpublish.gradle'
+
+
+android {
+    compileSdkVersion 28
+    buildToolsVersion '28.0.3'
+    defaultConfig {
+        applicationId "gradleplugn.gradleplugn"
+        minSdkVersion 15
+        targetSdkVersion 28
+        versionCode 100
+        versionName "0.1.0"
+
+        resConfigs "hdpi"
+    }
+
+    signingConfigs {
+        debug {
+        }
+
+        release {
+            storeFile file("../iobit-release-key.keystore")
+            storePassword System.getenv("KSTORE_PWD")
+            keyAlias System.getenv("KSTORE_ALIAS")
+            keyPassword System.getenv("KSTORE_ALIAS_PWD")
+        }
+    }
+
+    buildTypes {
+        debug {
+            minifyEnabled true
+            shrinkResources false
+            signingConfig signingConfigs.release
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            debuggable false
+            jniDebuggable false
+            zipAlignEnabled true
+        }
+
+        release {
+            minifyEnabled true
+            shrinkResources false
+            signingConfig signingConfigs.release
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            debuggable false
+            jniDebuggable false
+            zipAlignEnabled true
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation 'com.android.support:appcompat-v7:28.0.0-rc01'
+}

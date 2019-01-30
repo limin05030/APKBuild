@@ -1,0 +1,70 @@
+apply plugin: 'com.jfrog.bintray'
+
+def siteUrl = 'https://github.com/limin05030/darkmagic'      // 项目的主页
+def gitUrl = 'https://github.com/limin05030/darkmagic.git'   // Git仓库的url
+
+def PROJ_LICENCE_NAME = 'The Apache Software License, Version 2.0'
+def PROJ_LICENCE_URL  = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+
+group = rootProject.ext.groupId     // 项目包名
+version = rootProject.ext.version   // 项目版本号
+
+install {
+    repositories.mavenInstaller {
+        // This generates POM.xml with proper parameters
+        pom {
+            project {
+                name project.name
+                packaging 'jar'
+                description 'android apk build gradle plugin'
+                url siteUrl
+                // Set your license
+                licenses {
+                    license {
+                        name PROJ_LICENCE_NAME
+                        url PROJ_LICENCE_URL
+                    }
+                }
+                developers {
+                    developer {
+                        id 'sens' //填写的一些基本信息
+                        name 'sens'
+                        email 'hanren2012@gmail.com'
+                    }
+                }
+                scm {
+                    connection gitUrl
+                    developerConnection gitUrl
+                    url siteUrl
+                }
+            }
+        }
+    }
+}
+
+//task sourcesJar(type: Jar) {
+//    classifier = 'sources'
+//}
+//
+//artifacts {
+//    archives sourcesJar
+//}
+
+bintray {
+    Properties properties = new Properties()
+    properties.load(project.rootProject.file('local.properties').newDataInputStream())
+    user = properties.getProperty("bintray.user")  // 账号
+    key = properties.getProperty("bintray.apikey") // 发布用的KEY
+    configurations = ['archives']
+
+    // https://bintray.com/sensdarkmagic/Maven
+    pkg {
+        userOrg = "sensdarkmagic"         // 账号下面的organization
+        repo = "Maven"                    // organization下面的仓库
+        name = rootProject.ext.artifactId // 仓库里面的项目名字
+        websiteUrl = siteUrl
+        vcsUrl = gitUrl
+        licenses = ["Apache-2.0"]
+        publish = true
+    }
+}
