@@ -1,7 +1,7 @@
 apply plugin: 'com.jfrog.bintray'
 
-def siteUrl = 'https://github.com/limin05030/darkmagic'      // 项目的主页
-def gitUrl = 'https://github.com/limin05030/darkmagic.git'   // Git仓库的url
+def siteUrl = 'https://github.com/limin05030/apkbuild'      // 项目的主页
+def gitUrl = 'https://github.com/limin05030/apkbuild.git'   // Git仓库的url
 
 def PROJ_LICENCE_NAME = 'The Apache Software License, Version 2.0'
 def PROJ_LICENCE_URL  = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
